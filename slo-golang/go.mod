@@ -1,4 +1,4 @@
-module github.com/jrmanes/prometheus-go
+module github.com/jrmanes/prometheus-go/slo-golang
 
 go 1.15
 
