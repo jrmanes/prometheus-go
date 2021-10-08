@@ -1,0 +1,52 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prom-go-srv
+  namespace: prom-go
+spec:
+  selector:
+    app: prom-go
+  ports:
+    - name: prom-go-srv
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: prom-go-servicemonitor
+  namespace: prom-go
+  labels:
+    app: prom-go
+spec:
+  selector:
+    matchLabels:
+      app: prom-go
+  endpoints:
+  - port: prom-go-srv
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: prom-go
+  name: prom-go
+  namespace: prom-go
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: prom-go
+  template:
+    metadata:
+      labels:
+        app: prom-go
+    spec:
+      containers:
+      - image: localhost:5000/prom-go:latest
+        name: prom-go
+        ports:
+        - containerPort: 8080

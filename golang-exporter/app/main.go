@@ -13,7 +13,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
-var addr = flag.String("listen-address", ":8081", "The address to listen on for HTTP requests.")
+var addr = flag.String("listen-address", ":8080", "The address to listen on for HTTP requests.")
 
 var (
 	c = promauto.NewCounter(prometheus.CounterOpts{
