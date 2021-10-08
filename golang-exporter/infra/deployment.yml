@@ -8,8 +8,7 @@ spec:
   selector:
     app: prom-go
   ports:
-    - name: prom-go-srv
-      protocol: TCP
+    - name: prom-go
       port: 8080
       targetPort: 8080
 ---
@@ -17,7 +16,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: prom-go-servicemonitor
-  namespace: prom-go
+  namespace: monitoring
   labels:
     app: prom-go
 spec:
@@ -25,7 +24,28 @@ spec:
     matchLabels:
       app: prom-go
   endpoints:
-  - port: prom-go-srv
+  - port: prom-go
+    interval: 5s
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: prom-go-servicemonitor2
+  namespace: prom-go
+  labels:
+    app: prom-go
+spec:
+  selector:
+    matchLabels:
+      # Target app service
+      app: prom-go
+  endpoints:
+  - interval: 5s
+    path: /metrics
+    port: prom-go
+  namespaceSelector:
+    matchNames:
+    - prom-go
 ---
 apiVersion: apps/v1
 kind: Deployment
