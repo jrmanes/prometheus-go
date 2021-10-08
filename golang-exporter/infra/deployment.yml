@@ -20,32 +20,14 @@ metadata:
   labels:
     app: prom-go
 spec:
+  namespaceSelector:
+    any: true
   selector:
     matchLabels:
       app: prom-go
   endpoints:
   - port: prom-go
     interval: 5s
----
-apiVersion: monitoring.coreos.com/v1
-kind: ServiceMonitor
-metadata:
-  name: prom-go-servicemonitor2
-  namespace: prom-go
-  labels:
-    app: prom-go
-spec:
-  selector:
-    matchLabels:
-      # Target app service
-      app: prom-go
-  endpoints:
-  - interval: 5s
-    path: /metrics
-    port: prom-go
-  namespaceSelector:
-    matchNames:
-    - prom-go
 ---
 apiVersion: apps/v1
 kind: Deployment
